@@ -50,6 +50,9 @@ class Player(Entity):
         self.normal_scale_y = config.PLAYER_SIZE[1]
         self.slide_scale_y = config.PLAYER_SIZE[1] * config.SLIDE_HEIGHT_SCALE
         
+        # Z position (for collision detection)
+        self.z_position = config.PLAYER_START_Z
+        
         print(f"[PLAYER] Initialized at lane {self.lane}")
     
     def switch_lane(self, direction):
@@ -183,4 +186,5 @@ class Player(Entity):
         self.jump_progress = 0.0
         self.slide_timer = 0.0
         self.scale_y = self.normal_scale_y
+        self.z_position = config.PLAYER_START_Z
         print("[PLAYER] Reset")

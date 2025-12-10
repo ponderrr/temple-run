@@ -1,9 +1,4 @@
-"""
-Camera System - Smooth Follow
 
-The camera follows the player's lane position smoothly.
-Y and Z are fixed, only X position follows.
-"""
 
 """
 Camera System - Smooth Follow
