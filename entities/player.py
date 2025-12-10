@@ -7,6 +7,7 @@ Visual position smoothly lerps between lanes, but game logic uses discrete lane 
 
 from ursina import *
 import config
+from entities.geometry import generate_octahedron_mesh
 
 class Player(Entity):
     """
@@ -16,19 +17,20 @@ class Player(Entity):
     - Discrete lane position (0, 1, or 2)
     - Smooth visual position (lerped X coordinate)
     - Vertical state (for future jump/slide mechanics)
+    - Visuals: Rotating Octahedron + Particle Trail
     """
     
     def __init__(self):
         super().__init__(
-            model='cube',
+            model=generate_octahedron_mesh(size=0.5), # Slightly smaller radius for visual
             color=config.COLOR_PLAYER,
-            scale=config.PLAYER_SIZE,
+            scale=config.PLAYER_SIZE, # This scale applies to the model
             position=(
                 config.LANE_POSITIONS[config.PLAYER_START_LANE],
                 config.PLAYER_START_Y,
                 config.PLAYER_START_Z
             ),
-            collider='box'  # For future collision detection
+            collider='box'
         )
         
         # Lane State (DISCRETE)
@@ -52,6 +54,13 @@ class Player(Entity):
         
         # Z position (for collision detection)
         self.z_position = config.PLAYER_START_Z
+        
+        # Rotation for visuals
+        self.rotation_speed = Vec3(100, 200, 50)
+        
+        # Trail System
+        self.trail_timer = 0
+        self.trail_interval = 0.05 # Spawn particle every 0.05s
         
         print(f"[PLAYER] Initialized at lane {self.lane}")
     
@@ -131,13 +140,37 @@ class Player(Entity):
             self.update_jump()
         elif self.vertical_state == 'sliding':
             self.update_slide()
-    
+            
+        # 3. Visual Rotation
+        self.rotation += self.rotation_speed * time.dt
+        
+        # 4. Trail
+        self.update_trail()
+        
+    def update_trail(self):
+        """
+        Spawn trail particles.
+        """
+        self.trail_timer -= time.dt
+        if self.trail_timer <= 0:
+            self.trail_timer = self.trail_interval
+            
+            # Create a fading particle at current position
+            particle = Entity(
+                model='sphere',
+                color=self.color,
+                position=self.position,
+                scale=self.scale * 0.5,
+                add_to_scene_entities=False # Don't clutter
+            )
+            # Animation: Fade out and shrink
+            particle.animate_scale(0, duration=0.5, curve=curve.linear)
+            particle.animate_color(color.clear, duration=0.5, curve=curve.linear)
+            destroy(particle, delay=0.5)
+
     def update_jump(self):
         """
         Update jump animation using parabolic curve.
-        
-        The curve formula: height = 4 * t * (1 - t)
-        This creates a smooth parabolic arc from 0 -> peak -> 0
         """
         # Increment progress
         self.jump_progress += time.dt / config.JUMP_DURATION
@@ -153,8 +186,6 @@ class Player(Entity):
             return
         
         # Calculate height using parabolic curve
-        # Formula: 4*t*(1-t) where t goes from 0 to 1
-        # Result: 0 -> 1 -> 0 (smooth parabola)
         t = self.jump_progress
         curve_value = 4 * t * (1 - t)
         height = curve_value * config.JUMP_HEIGHT
@@ -188,3 +219,4 @@ class Player(Entity):
         self.scale_y = self.normal_scale_y
         self.z_position = config.PLAYER_START_Z
         print("[PLAYER] Reset")
+
