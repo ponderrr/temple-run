@@ -125,7 +125,8 @@ def update():
                 score_manager.shield_active,
                 score_manager.shield_timer,
                 game_state,
-                score_manager.orbs_collected
+                score_manager.orbs_collected,
+                score_manager.high_score
             )
         return
         
@@ -138,7 +139,8 @@ def update():
                 score_manager.shield_active,
                 score_manager.shield_timer,
                 game_state,
-                score_manager.orbs_collected
+                score_manager.orbs_collected,
+                score_manager.high_score
             )
         return
     
@@ -151,7 +153,8 @@ def update():
                 score_manager.shield_active,
                 score_manager.shield_timer,
                 game_state,
-                score_manager.orbs_collected
+                score_manager.orbs_collected,
+                score_manager.high_score
             )
         return
     
@@ -233,7 +236,8 @@ def update():
             score_manager.shield_active,
             score_manager.shield_timer,
             game_state,
-            score_manager.orbs_collected
+            score_manager.orbs_collected,
+            score_manager.high_score
         )
     
     # Update debug text

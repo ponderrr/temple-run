@@ -27,6 +27,15 @@ class HUD:
             color=config.UI_COLOR
         )
         
+        # High Score (Top Right, below distance)
+        self.high_score_text = Text(
+            text='Best: 0',
+            position=(0.65, 0.40),
+            scale=config.UI_FONT_SIZE * 0.8,  # Slightly smaller
+            color=config.COLOR_MENU_TITLE,  # Gold color
+            enabled=False
+        )
+        
         # Shield Status (Center Top)
         self.shield_text = Text(
             text='SHIELD ACTIVE',
@@ -89,13 +98,15 @@ class HUD:
         
         print("[HUD] Initialized")
     
-    def update(self, score, distance, shield_active, shield_timer, game_state, orbs_collected=0):
+    def update(self, score, distance, shield_active, shield_timer, game_state, orbs_collected=0, high_score=0):
         """
         Update UI elements.
         """
         # Hide everything by default
         self.score_text.enabled = False
+        self.score_text.enabled = False
         self.distance_text.enabled = False
+        self.high_score_text.enabled = False
         self.shield_text.enabled = False
         self.game_over_text.enabled = False
         self.menu_title.enabled = False
@@ -114,6 +125,11 @@ class HUD:
             
             self.score_text.text = f'Score: {int(score)}'
             self.distance_text.text = f'Distance: {int(distance)}m'
+            
+            # Show high score if it exists
+            if high_score > 0:
+                self.high_score_text.enabled = True
+                self.high_score_text.text = f'Best: {int(high_score)}'
             
             if shield_active:
                 self.shield_text.enabled = True

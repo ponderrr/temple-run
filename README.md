@@ -8,14 +8,14 @@
 ![Version](https://img.shields.io/badge/Version-1.0.0-blue?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-purple?style=for-the-badge)
 ![Framework](https://img.shields.io/badge/Engine-Ursina-orange?style=for-the-badge)
-![Architecture](https://img.shields.io/badge/Architecture-ECS-red?style=for-the-badge)
+![Architecture](https://img.shields.io/badge/Architecture-Modular-red?style=for-the-badge)
 
 <br/>
 </div>
 
 ## 📖 About
 
-**Temple Run Arcade 3D** is a specialized engine implementation of the classic endless runner genre, re-engineered for **deterministic arcade compliance**. unlike traditional physics-based runners, this engine utilizes a discrete state machine and lane-based coordinate system to ensure pixel-perfect collision detection and zero-latency input response.
+**Temple Run Arcade 3D** is a specialized engine implementation of the classic endless runner genre, re-engineered for **deterministic arcade compliance**. Unlike traditional physics-based runners, this engine utilizes a discrete state machine and lane-based coordinate system to ensure pixel-perfect collision detection and zero-latency input response.
 
 Built for developers who need to understand **game loop architecture** and **procedural generation** without the overhead of heavy commercial engines.
 
@@ -24,9 +24,9 @@ Built for developers who need to understand **game loop architecture** and **pro
 ## 🚀 Key Features
 
 *   **Deterministic State Machine** — Uses discrete integer-based lane logic (0, 1, 2) rather than floating-point physics to guarantee predictable outcomes.
-*   **Zero-Allocation Pooling** — Custom `ObstacleSpawner` utilizes object pooling principles to minimize garbage collection spikes during high-speed runtime.
-*   **Procedural Track Generation** — Infinite world generation using efficient chunk recycling and dynamic difficulty scaling.
-*   **Reactive Event Bus** — Decoupled `CollisionDetector`, `ScoreManager`, and `VFXManager` systems communicating via direct state interrogation.
+*   **Efficient Entity Management** — Clean separation of visual and logical layers with automatic entity cleanup to prevent memory leaks.
+*   **Procedural Track Generation** — Infinite world generation using dynamic difficulty scaling and pattern-based spawning.
+*   **Modular System Architecture** — Decoupled game systems (collision, scoring, spawning) that communicate through well-defined interfaces.
 *   **Hot-Reloadable Config** — Centralized configuration management for rapid gameplay tuning without recompilation.
 
 ---
@@ -180,6 +180,21 @@ def check_collision(self, player, obstacles):
 ### Running the Engine
 ```bash
 python main.py
+```
+
+**First-Time Setup:**
+The game will automatically generate all required texture assets on first run. You should see:
+```
+[SETUP] Generating missing textures...
+[SETUP] Texture generation complete!
+```
+
+This only happens once. Subsequent runs will skip this step.
+
+**Manual Texture Generation (Optional):**
+If you want to regenerate textures or inspect the generation process:
+```bash
+python utils/texture_gen.py
 ```
 
 ---
