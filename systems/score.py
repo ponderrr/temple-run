@@ -5,7 +5,7 @@ Score System - Track Progress and Rewards
 """
 
 import time
-import time
+
 import config
 import os
 import json

@@ -125,3 +125,10 @@ COLOR_MENU_TEXT = color.white
 
 # Debug
 DEBUG_MODE = False
+
+# ====================================
+# PHASE 5 FIXES: MAGIC NUMBERS
+# ====================================
+PLAYER_COLLISION_RADIUS = 1.0
+COLLECTIBLE_SPAWN_CHANCE = 0.3
+

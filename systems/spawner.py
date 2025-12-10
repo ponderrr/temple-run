@@ -35,7 +35,7 @@ class ObstacleSpawner:
             self.spawn_obstacle()
             
             # Chance to spawn collectible
-            if random.random() < 0.3:  # 30% chance
+            if random.random() < config.COLLECTIBLE_SPAWN_CHANCE:  # 30% chance
                 self.spawn_collectible()
             
             # Calculate next spawn interval (scales with difficulty)

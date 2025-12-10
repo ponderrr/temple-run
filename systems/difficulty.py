@@ -34,10 +34,9 @@ class DifficultyManager:
         
         # Calculate multiplier (1.0 to 2.5)
         self.difficulty_multiplier = self.current_speed / config.INITIAL_SPEED
-        
-        # Update config speed (so other systems see it if they read config directly, 
-        # though ideally they should take it as an argument)
-        config.TRACK_SCROLL_SPEED = self.current_speed
+
+        return self.current_speed, self.difficulty_multiplier
+
         
     def get_spawn_interval_multiplier(self):
         """

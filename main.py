@@ -159,8 +159,9 @@ def update():
         return
     
     # Update difficulty
+    current_speed = config.INITIAL_SPEED
     if difficulty_manager and score_manager:
-        difficulty_manager.update(score_manager.distance)
+        current_speed, _ = difficulty_manager.update(score_manager.distance)
         
     # Update VFX
     if vfx_manager:
@@ -169,8 +170,9 @@ def update():
         if camera_controller:
             camera_controller.shake_offset = vfx_manager.shake_offset
         
-    # Get current speed
-    current_speed = difficulty_manager.current_speed if difficulty_manager else config.TRACK_SCROLL_SPEED
+    # Get current speed (already got it, but fallback if difficulty manager missing)
+    if not difficulty_manager:
+        current_speed = config.TRACK_SCROLL_SPEED
     
     # Update camera
     camera_controller.update()
