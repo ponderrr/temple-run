@@ -14,10 +14,11 @@ class ObstacleSpawner:
     Creates varied patterns while avoiding impossible situations.
     """
     
-    def __init__(self):
+    def __init__(self, difficulty_manager=None):
         self.spawn_timer = config.SPAWN_INTERVAL_MAX
         self.obstacles = []  # Track all active obstacles (and collectibles)
         self.last_lane = 1  # Avoid spawning same lane twice
+        self.difficulty_manager = difficulty_manager
         
         print("[SPAWNER] Initialized")
     
@@ -37,14 +38,20 @@ class ObstacleSpawner:
             if random.random() < 0.3:  # 30% chance
                 self.spawn_collectible()
             
-            # Calculate next spawn interval (scales with speed)
-            # Higher speed = shorter interval (to maintain distance)
+            # Calculate next spawn interval (scales with difficulty)
             base_interval = random.uniform(
                 config.SPAWN_INTERVAL_MIN,
                 config.SPAWN_INTERVAL_MAX
             )
-            speed_factor = config.TRACK_SCROLL_SPEED / current_speed
-            self.spawn_timer = base_interval * speed_factor
+            
+            # Use difficulty manager if available
+            if self.difficulty_manager:
+                multiplier = self.difficulty_manager.get_spawn_interval_multiplier()
+            else:
+                # Fallback: calculate manually
+                multiplier = config.TRACK_SCROLL_SPEED / current_speed
+            
+            self.spawn_timer = base_interval * multiplier
     
     def spawn_obstacle(self):
         """

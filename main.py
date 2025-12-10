@@ -4,6 +4,7 @@ Main Entry Point
 """
 
 from ursina import *
+import os
 import config
 from entities.player import Player
 from entities.track import Track
@@ -67,9 +68,13 @@ def init_entities():
     # Create camera controller
     camera_controller = CameraController(player)
     
+    # Create difficulty manager
+    global difficulty_manager
+    difficulty_manager = DifficultyManager()
+
     # Create spawner
     global spawner
-    spawner = ObstacleSpawner()
+    spawner = ObstacleSpawner(difficulty_manager)
     
     # Create collision detector
     global collision_detector
@@ -84,8 +89,8 @@ def init_entities():
     hud = HUD()
     
     # Create difficulty manager
-    global difficulty_manager
-    difficulty_manager = DifficultyManager()
+    # global difficulty_manager
+    # difficulty_manager = DifficultyManager()
     
     # Create VFX manager
     global vfx_manager
@@ -332,6 +337,43 @@ def reset_game():
 # ENTRY POINT
 # ==========================================
 if __name__ == '__main__':
+    # Generate textures if they don't exist
+    required_textures = [
+        'assets/track_texture.png',
+        'assets/wall_texture.png',
+        'assets/wood_texture.png',
+        'assets/metal_texture.png',
+        'assets/orb_texture.png'
+    ]
+    
+    missing_textures = [tex for tex in required_textures if not os.path.exists(tex)]
+    
+    if missing_textures:
+        print("[SETUP] Generating missing textures...")
+        from utils.texture_gen import (
+            ensure_assets_dir,
+            generate_track_texture,
+            generate_wall_texture,
+            generate_wood_texture,
+            generate_metal_texture,
+            generate_orb_texture
+        )
+        
+        ensure_assets_dir()
+        
+        if not os.path.exists('assets/track_texture.png'):
+            generate_track_texture()
+        if not os.path.exists('assets/wall_texture.png'):
+            generate_wall_texture()
+        if not os.path.exists('assets/wood_texture.png'):
+            generate_wood_texture()
+        if not os.path.exists('assets/metal_texture.png'):
+            generate_metal_texture()
+        if not os.path.exists('assets/orb_texture.png'):
+            generate_orb_texture()
+        
+        print("[SETUP] Texture generation complete!")
+
     app = init_game()
     init_entities()
     
