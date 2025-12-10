@@ -34,7 +34,7 @@ class Obstacle(Entity):
             model = 'cube'
             scale = config.OBS_LOW_SIZE
             y_pos = config.OBS_LOW_HEIGHT
-            color = config.COLOR_OBS_LOW
+            obs_color = config.COLOR_OBS_LOW
             texture = config.TEXTURE_WOOD
             texture_scale = (1, 1)
             
@@ -42,7 +42,7 @@ class Obstacle(Entity):
             model = 'cube'
             scale = config.OBS_HIGH_SIZE
             y_pos = config.OBS_HIGH_HEIGHT
-            color = config.COLOR_OBS_HIGH
+            obs_color = config.COLOR_OBS_HIGH
             texture = config.TEXTURE_WALL
             texture_scale = (1, 2)
             
@@ -50,7 +50,7 @@ class Obstacle(Entity):
             model = 'cube'
             scale = config.OBS_MOVING_SIZE
             y_pos = config.OBS_MOVING_HEIGHT
-            color = config.COLOR_OBS_MOVING
+            obs_color = config.COLOR_OBS_MOVING
             texture = config.TEXTURE_METAL
             texture_scale = (1, 1)
             self.move_speed = config.OBS_MOVING_SPEED
@@ -64,13 +64,27 @@ class Obstacle(Entity):
         # Initialize entity
         super().__init__(
             model=model,
-            color=color,
+            color=obs_color,
             scale=scale,
             texture=texture,
             texture_scale=texture_scale,
             position=(x_pos, y_pos, z_position),
             collider='box'
         )
+
+        # Glow Effect (Child Entity)
+        # A slightly larger, transparent sphere/cube to simulate emission
+        self.glow = Entity(
+            parent=self,
+            model=model,
+            color=color.rgba(obs_color.r, obs_color.g, obs_color.b, 100), # Transparent version of base color
+            scale=1.2, # Slightly larger
+            texture=None,
+            unlit=True, # Glow appearance
+            add_to_scene_entities=False # Optimization? No, needs to be in scene to render.
+        )
+        # Pulse animation handled in update if needed, or just static glow
+
         
         # Store state
         self.lane = lane

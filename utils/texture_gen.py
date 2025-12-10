@@ -139,6 +139,45 @@ def generate_orb_texture():
     img.save(os.path.join(ASSETS_DIR, 'orb_texture.png'))
     print("Generated orb_texture.png")
 
+def generate_sky_texture():
+    """Generate a starry sky texture."""
+    size = 1024
+    img = Image.new('RGB', (size, size), (5, 5, 20)) # Dark blue-ish space
+    pixels = img.load()
+    draw = ImageDraw.Draw(img)
+    
+    # 1. Subtle Nebula/Gradient
+    # Simple vertical gradient/noise
+    for y in range(size):
+        for x in range(size):
+            # Base color
+            r, g, b = 5, 5, 20
+            
+            # Add some noise/nebula clouds
+            noise = random.randint(-5, 5)
+            
+            pixels[x, y] = (max(0, r+noise), max(0, g+noise), max(0, b+noise))
+            
+    # 2. Stars
+    num_stars = 500
+    for _ in range(num_stars):
+        x = random.randint(0, size-1)
+        y = random.randint(0, size-1)
+        brightness = random.randint(100, 255)
+        
+        # Draw star (single pixel or small cross for bigger ones)
+        if random.random() < 0.1: # Bright star
+            draw.point((x, y), fill=(brightness, brightness, brightness))
+            draw.point((x+1, y), fill=(brightness//2, brightness//2, brightness//2))
+            draw.point((x-1, y), fill=(brightness//2, brightness//2, brightness//2))
+            draw.point((x, y+1), fill=(brightness//2, brightness//2, brightness//2))
+            draw.point((x, y-1), fill=(brightness//2, brightness//2, brightness//2))
+        else:
+            draw.point((x, y), fill=(brightness, brightness, brightness))
+            
+    img.save(os.path.join(ASSETS_DIR, 'sky_texture.png'))
+    print("Generated sky_texture.png")
+
 if __name__ == '__main__':
     ensure_assets_dir()
     generate_track_texture()
@@ -146,3 +185,4 @@ if __name__ == '__main__':
     generate_wood_texture()
     generate_metal_texture()
     generate_orb_texture()
+    generate_sky_texture()

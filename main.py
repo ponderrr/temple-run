@@ -16,6 +16,7 @@ from systems.ui import HUD
 from systems.difficulty import DifficultyManager
 from systems.vfx import VFXManager
 
+
 # ==========================================
 # GLOBAL STATE
 # ==========================================
@@ -29,6 +30,7 @@ score_manager = None
 hud = None
 difficulty_manager = None
 vfx_manager = None
+starfield = None
 debug_text = None
 
 # ==========================================
@@ -57,7 +59,7 @@ def init_game():
 
 def init_entities():
     """Create game entities."""
-    global player, track, camera_controller, debug_text
+    global player, track, camera_controller, debug_text, starfield
     
     # Create track first (so it's behind player visually)
     track = Track()
@@ -87,10 +89,6 @@ def init_entities():
     # Create HUD
     global hud
     hud = HUD()
-    
-    # Create difficulty manager
-    # global difficulty_manager
-    # difficulty_manager = DifficultyManager()
     
     # Create VFX manager
     global vfx_manager
